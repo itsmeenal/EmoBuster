@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detector & Stress Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api"></script>
+
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <header>
+        <h1>Welcome to Your Virtual Wellness Friend</h1>
+        <p>Let me guide you through the process of detecting emotions and managing stress!</p>
+    </header>
+
+    <!-- Floating Chatbot -->
+    <div id="bot">
+        <div id="bot-message">Hi there! I'm your Wellness Bot.</div>
+        <img src="bot.png" alt="Virtual Bot" class="bot-img">
+    </div>
+
+    <main>
+        <section id="emotion-detector">
+            <h2>Emotion Detection</h2>
+            <video id="webcam" autoplay muted></video>
+            <canvas id="overlay"></canvas>
+            <p id="emotion-result">Emotion: Neutral</p>
+        </section>
+
+        <section id="stress-manager">
+            <h2>Stress Manager</h2>
+            <p>We will suggest stress-relief activities based on your emotions.</p>
+            <button id="start-relaxation">Start Relaxation Exercise</button>
+        </section>
+
+        <section id="virtual-friend">
+            <h2>Talk to Your Virtual Friend</h2>
+            <div id="chat-window"></div>
+            <input type="text" id="user-input" placeholder="How are you feeling today?" />
+            <button id="send">Send</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

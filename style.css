@@ -1,0 +1,117 @@
+/* Basic Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+    background: linear-gradient(to bottom right, #FFDEE9, #B5FFFC);
+    color: #333;
+    overflow-x: hidden;
+    position: relative;
+}
+
+header {
+    text-align: center;
+    padding: 50px;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/* Emotion Detector */
+#emotion-detector, #stress-manager, #virtual-friend {
+    width: 30%;
+    background: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#emotion-detector h2, #stress-manager h2, #virtual-friend h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+video, canvas {
+    width: 100%;
+    border-radius: 10px;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #00C9FF;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #92FE9D;
+}
+
+/* Floating Bot */
+#bot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    animation: floatBot 4s ease-in-out infinite;
+}
+
+#bot img {
+    width: 100%;
+}
+
+#bot-message {
+    background: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 120px;
+    right: 0;
+    display: none;
+    font-size: 0.9rem;
+}
+
+.bot-img {
+    transition: transform 0.2s;
+}
+
+.bot-img:hover {
+    transform: scale(1.1);
+}
+
+/* Floating Animation */
+@keyframes floatBot {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
