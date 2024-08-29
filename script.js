@@ -1,3 +1,4 @@
+// adding the bot mssage for 5 second
 const bot = document.getElementById('bot');
 const botMessage = document.getElementById('bot-message');
 
@@ -9,7 +10,6 @@ bot.addEventListener('click', () => {
 });
 
 const video = document.getElementById('webcam');
-const emotionResult = document.getElementById('emotion-result');
 
 // Access webcam
 navigator.mediaDevices.getUserMedia({ video: {} })
@@ -17,8 +17,7 @@ navigator.mediaDevices.getUserMedia({ video: {} })
       video.srcObject = stream;
   });
 
-// Load models for face detection and emotion recognition
-Promise.all([
+  Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
     faceapi.nets.faceExpressionNet.loadFromUri('/models')
 ]).then(startEmotionDetection);
@@ -40,21 +39,15 @@ function startEmotionDetection() {
             faceapi.draw.drawDetections(canvas, resizedDetections);
             faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
 
-            // Update emotion result
             if (detections[0] && detections[0].expressions) {
                 const emotions = detections[0].expressions;
                 const dominantEmotion = Object.keys(emotions).reduce((a, b) => emotions[a] > emotions[b] ? a : b);
                 emotionResult.textContent = `Emotion: ${dominantEmotion}`;
+                suggestRelaxation(dominantEmotion); // Call relaxation function based on emotion
             }
         }, 100);
     });
 }
-const relaxationButton = document.getElementById('start-relaxation');
-
-relaxationButton.addEventListener('click', () => {
-    alert('Take a deep breath! Inhale... Exhale...');
-});
-
 function suggestRelaxation(dominantEmotion) {
     if (dominantEmotion === 'angry' || dominantEmotion === 'stressed') {
         relaxationButton.style.display = 'block';
@@ -62,3 +55,17 @@ function suggestRelaxation(dominantEmotion) {
         relaxationButton.style.display = 'none';
     }
 }
+
+relaxationButton.addEventListener('click', () => {
+    alert('Take a deep breath! Inhale... Exhale...');
+});
+const chatWindow = document.getElementById('chat-window');
+const userInput = document.getElementById('user-input');
+
+document.getElementById('send').addEventListener('click', () => {
+    const userMessage = userInput.value;
+    chatWindow.innerHTML += `<p>User: ${userMessage}</p>`;
+    userInput.value = ''; // Clear the input field
+    // Here you would send the message to Dialogflow or any chatbot API
+});
+

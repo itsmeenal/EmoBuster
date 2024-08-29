@@ -4,49 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotion Detector & Stress Manager</title>
+    <title>Advanced Emotion Detector & Stress Manager</title>
     <link rel="stylesheet" href="style.css">
+    <!-- TensorFlow.js and face-api for AI and facial recognition -->
+    <script type="module" src="yourModule.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api"></script>
-
 </head>
 
 <body>
     <div class="overlay"></div>
     <header>
-        <h1>Welcome to Your Virtual Wellness Friend</h1>
-        <p>Let me guide you through the process of detecting emotions and managing stress!</p>
+        <h1>Welcome to Your Advanced Virtual Wellness Friend</h1>
+        <p>Let me guide you through detecting emotions and managing stress with AI-driven insights!</p>
     </header>
 
     <!-- Floating Chatbot -->
     <div id="bot">
-        <div id="bot-message">Hi there! I'm your Wellness Bot.</div>
+        <div id="bot-message">Hi there! I'm your Wellness Bot, ready to help you feel better!</div>
         <img src="bot.png" alt="Virtual Bot" class="bot-img">
     </div>
 
     <main>
+        <!-- Emotion Detection Section -->
         <section id="emotion-detector">
             <h2>Emotion Detection</h2>
             <video id="webcam" autoplay muted></video>
             <canvas id="overlay"></canvas>
             <p id="emotion-result">Emotion: Neutral</p>
+            <p id="emotion-feedback">We detect that you're feeling neutral. Want to explore ways to improve your mood?</p>
         </section>
 
+        <!-- Stress Manager Section -->
         <section id="stress-manager">
             <h2>Stress Manager</h2>
-            <p>We will suggest stress-relief activities based on your emotions.</p>
+            <p>We suggest stress-relief activities tailored to your emotions. Try one out below!</p>
             <button id="start-relaxation">Start Relaxation Exercise</button>
+            <div id="suggested-activity">Activity: Deep Breathing</div>
+            <audio id="relaxation-audio" controls style="display:none;">
+                <source src="relaxation.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </section>
 
+        <!-- Virtual Friend Chatbot Section -->
         <section id="virtual-friend">
             <h2>Talk to Your Virtual Friend</h2>
             <div id="chat-window"></div>
             <input type="text" id="user-input" placeholder="How are you feeling today?" />
             <button id="send">Send</button>
+            <p id="bot-reply">Let's talk! I'm here to help.</p>
         </section>
     </main>
 
+    <!-- External JavaScript File for AI Logic -->
     <script src="script.js"></script>
+    <script>
+        // Face API Initialization and Real-time Emotion Detection
+        const webcam = document.getElementById('webcam');
+        const canvas = document.getElementById('overlay');
+        const emotionResult = document.getElementById('emotion-result');
+        const emotionFeedback = document.getElementById('emotion-feedback');
+
+        async function startEmotionDetection() {
+            await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+            await faceapi.nets.faceExpressionNet.loadFromUri('/models');
+            
+            navigator.mediaDevices.getUserMedia({ video: {} }).then((stream) => {
+                webcam.srcObject = stream;
+            });
+
+            webcam.addEventListener('play', () => {
+                const displaySize = { width: webcam.width, height: webcam.height };
+                faceapi.matchDimensions(canvas, displaySize);
+                
+                setInterval(async () => {
+                    const detections = await faceapi.detectAllFaces(webcam, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+                    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                    
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                    faceapi.draw.drawDetections(canvas, resizedDetections);
+                    faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+                    
+                    if (detections.length > 0) {
+                        const emotions = detections[0].expressions;
+                        const maxEmotion = Object.keys(emotions).reduce((a, b) => emotions[a] > emotions[b] ? a : b);
+                        emotionResult.textContent = `Emotion: ${maxEmotion.charAt(0).toUpperCase() + maxEmotion.slice(1)}`;
+                        
+                        // Suggesting stress-relief activities based on the detected emotion
+                        if (maxEmotion === 'happy') {
+                            emotionFeedback.textContent = "You're feeling happy! Keep up the good vibes!";
+                        } else if (maxEmotion === 'sad') {
+                            emotionFeedback.textContent = "It seems you're feeling sad. How about trying some relaxation exercises?";
+                        }
+                    }
+                }, 100);
+            });
+        }
+        startEmotionDetection();
+    </script>
 </body>
 
 </html>
